@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
+<head> google-site-verification: googlea473f661aa8a3b15.html
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Đoán Tên Của Bạn</title>
+<title>Đoán Tên</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: system-ui, sans-serif; background: #f5f5f0; display: flex; justify-content: center; padding: 2rem 1rem; min-height: 100vh; }
@@ -39,9 +39,63 @@
   .congrats-sub { font-size: 14px; color: #888; }
   .fail-txt { font-size: 15px; color: #666; text-align: center; margin-bottom: 1rem; line-height: 1.6; }
   .save-msg { text-align: center; font-size: 14px; margin-top: 8px; }
+  .data-btn { position: fixed; top: 20px; right: 20px; background: #f0f0f0; border: 1px solid #ddd; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; z-index: 100; transition: background 0.2s; }
+  .data-btn:hover { background: #e5e5e5; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; }
+  .modal-overlay.show { display: flex; }
+  .modal-box { background: #fff; border-radius: 14px; padding: 2rem; max-width: 600px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 90%; }
+  .modal-title { font-size: 20px; font-weight: 600; margin-bottom: 1rem; }
+  .modal-section { margin-bottom: 1.5rem; }
+  .modal-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .stat-item { background: #f5f5f0; padding: 12px; border-radius: 8px; }
+  .stat-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+  .stat-value { font-size: 18px; font-weight: 600; color: #1a1a1a; }
+  .btn-group { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .btn-export { background: #e8f1fd; color: #1d4ed8; padding: 8px 14px; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer; font-size: 13px; transition: background 0.2s; }
+  .btn-export:hover { background: #dbeafe; }
+  .btn-danger { background: #fee2e2; color: #991b1b; padding: 8px 14px; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; font-size: 13px; transition: background 0.2s; }
+  .btn-danger:hover { background: #fef2f2; }
+  .btn-close { background: #f0f0f0; color: #666; padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; font-size: 13px; }
+  .btn-close:hover { background: #e5e5e5; }
+  .names-list { background: #f5f5f0; border-radius: 8px; max-height: 300px; overflow-y: auto; }
+  .name-item { padding: 10px 12px; border-bottom: 1px solid #e5e5e0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+  .name-item:last-child { border-bottom: none; }
+  .name-info { flex: 1; }
+  .name-text { font-weight: 500; color: #1a1a1a; }
+  .name-meta { font-size: 12px; color: #888; margin-top: 2px; }
+  .name-delete { background: #fee2e2; color: #991b1b; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: background 0.2s; }
+  .name-delete:hover { background: #fecaca; }
+  .password-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 250; justify-content: center; align-items: center; }
+  .password-modal.show { display: flex; }
+  .password-box { background: #fff; border-radius: 14px; padding: 2rem; width: 90%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+  .password-title { font-size: 18px; font-weight: 600; margin-bottom: 1rem; color: #1a1a1a; }
+  .password-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 1rem; outline: none; letter-spacing: 2px; }
+  .password-input:focus { border-color: #3b82f6; }
+  .password-error { color: #dc2626; font-size: 13px; margin-bottom: 1rem; min-height: 18px; }
+  .password-buttons { display: flex; gap: 8px; }
+  .password-buttons button { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; font-size: 14px; transition: background 0.2s; }
+  .pwd-btn-confirm { background: #e8f1fd; color: #1d4ed8; border-color: #bfdbfe; }
+  .pwd-btn-confirm:hover { background: #dbeafe; }
+  .pwd-btn-cancel { background: #f0f0f0; color: #666; }
+  .pwd-btn-cancel:hover { background: #e5e5e5; }
 </style>
 </head>
 <body>
+<button class="data-btn" onclick="requestPassword()">📊 Quản lý dữ liệu</button>
+
+<!-- Modal Nhập Mật Khẩu -->
+<div class="password-modal" id="passwordModal">
+  <div class="password-box">
+    <div class="password-title">🔐 Nhập mật khẩu</div>
+    <input type="password" id="passwordInput" class="password-input" placeholder="Mật khẩu..." autocomplete="off" />
+    <div class="password-error" id="passwordError"></div>
+    <div class="password-buttons">
+      <button class="pwd-btn-confirm" onclick="verifyPassword()">✓ Xác nhận</button>
+      <button class="pwd-btn-cancel" onclick="closePasswordModal()">✕ Hủy</button>
+    </div>
+  </div>
+</div>
+
 <div id="app">
   <h1>Tôi đoán tên bạn!</h1>
   <p class="sub">Nhập chữ cái đầu của từng phần trong tên, cách nhau bằng dấu cách.</p>
@@ -110,12 +164,49 @@
   </div>
 </div>
 
+<!-- Modal Quản lý dữ liệu -->
+<div class="modal-overlay" id="dataModal">
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+      <h2 class="modal-title">📊 Quản lý dữ liệu tên</h2>
+      <button class="btn-close" onclick="closeDataManager()">✕</button>
+    </div>
+
+    <!-- Thống kê -->
+    <div class="modal-section">
+      <div style="font-size:13px;color:#888;margin-bottom:8px;font-weight:500">THỐNG KÊ</div>
+      <div class="modal-stats">
+        <div class="stat-item">
+          <div class="stat-label">Tổng số tên</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Cập nhật gần nhất</div>
+          <div class="stat-value" id="statDate" style="font-size:14px">-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nút tác vụ -->
+    <div class="modal-section">
+      <div class="btn-group">
+        <button class="btn-export" onclick="exportJSON()">📥 Xuất JSON</button>
+        <button class="btn-export" onclick="exportCSV()">📥 Xuất CSV</button>
+        <button class="btn-danger" onclick="clearAllData()">🗑️ Xóa tất cả</button>
+      </div>
+    </div>
+
+    <!-- Danh sách tên -->
+    <div class="modal-section">
+      <div style="font-size:13px;color:#888;margin-bottom:8px;font-weight:500">DANH SÁCH TÊN ĐÃ LƯU</div>
+      <div class="names-list" id="namesList"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 // =============================================
 // DỮ LIỆU: họ, đệm, tên — lưu đầy đủ dấu
-// =============================================
-// =============================================
-// DỮ LIỆU MỞ RỘNG — họ, đệm, tên đầy đủ dấu
 // =============================================
 const HO = [
   'An','Ân',
@@ -193,9 +284,9 @@ function parseInits(raw) {
 
 // =============================================
 // DATABASE TẦN SUẤT — lưu trong localStorage
-// Cấu trúc: { "ho:Nguyễn": 5, "dem:Văn": 3, "ten:An": 8, ... }
 // =============================================
 const DB_KEY = 'viet_freq_db';
+const NAMES_DB_KEY = 'viet_names_db';
 
 function loadFreq() {
   try { return JSON.parse(localStorage.getItem(DB_KEY) || '{}'); }
@@ -206,8 +297,15 @@ function saveFreq(freq) {
   try { localStorage.setItem(DB_KEY, JSON.stringify(freq)); } catch(e) {}
 }
 
-// Tăng tần suất của từng từ khi đoán đúng
-// role: 'ho' | 'dem' | 'ten'
+function loadNames() {
+  try { return JSON.parse(localStorage.getItem(NAMES_DB_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function saveNames(names) {
+  try { localStorage.setItem(NAMES_DB_KEY, JSON.stringify(names)); } catch(e) {}
+}
+
 function recordWord(role, word) {
   const freq = loadFreq();
   const key = role + ':' + word;
@@ -215,19 +313,15 @@ function recordWord(role, word) {
   saveFreq(freq);
 }
 
-// Lấy tần suất của một từ
 function getFreq(role, word) {
   const freq = loadFreq();
   return freq[role + ':' + word] || 0;
 }
 
 // =============================================
-// CHỌN TỪ CÓ TRỌNG SỐ THEO TẦN SUẤT
-// Pool đã lọc đúng chữ cái đầu & chưa bị loại
-// Từ có tần suất cao → xác suất chọn cao hơn
-// Công thức trọng số: w = freq + BASE (BASE để từ mới vẫn có cơ hội)
+// CHỌN TỪ CÓ TRỌNG SỐ
 // =============================================
-const BASE_WEIGHT = 2; // trọng số tối thiểu cho từ chưa có data
+const BASE_WEIGHT = 2;
 
 function weightedPick(pool, role) {
   if (!pool.length) return null;
@@ -241,11 +335,10 @@ function weightedPick(pool, role) {
   return pool[pool.length - 1];
 }
 
-// Lọc pool: đúng chữ cái đầu & chưa bị rejected, sắp xếp phổ biến trước
 function buildPool(baseList, role, ch, excludeSet) {
   return baseList
     .filter(w => fc(w) === ch.toUpperCase() && !excludeSet.has(w))
-    .sort((a, b) => getFreq(role, b) - getFreq(role, a)); // phổ biến nhất đứng đầu
+    .sort((a, b) => getFreq(role, b) - getFreq(role, a));
 }
 
 function roleOf(i, n) {
@@ -286,11 +379,6 @@ function startGame() {
   }, 800);
 }
 
-// =============================================
-// XÂY DỰNG LƯỢT ĐOÁN
-// Ưu tiên từ phổ biến (theo tần suất đoán đúng lịch sử)
-// Loại từ đã đoán sai lần này
-// =============================================
 function buildGuess() {
   const { parts, locked, rejected } = S;
   const n = parts.length;
@@ -302,13 +390,11 @@ function buildGuess() {
 
     let pool = buildPool(base, role, ch, rejected[i]);
 
-    // Đã thử hết → reset rejected vị trí này
     if (!pool.length) {
       rejected[i].clear();
       pool = buildPool(base, role, ch, rejected[i]);
     }
 
-    // Chọn có trọng số: từ phổ biến hơn được ưu tiên
     const word = weightedPick(pool, role);
     return word !== null ? word : '[' + ch + '?]';
   });
@@ -347,7 +433,6 @@ function renderSegs() {
 }
 
 function onRight() {
-  // Lưu tần suất từng từ đã đoán đúng (kể cả từ được người chơi giữ lại)
   const n = S.parts.length;
   S.cur.forEach((word, i) => {
     if (!word.startsWith('[')) {
@@ -370,7 +455,6 @@ function onRight() {
   renderWinStats();
 }
 
-// Hiển thị top 10 từ phổ biến nhất (tất cả vai trò)
 function renderWinStats() {
   const freq = loadFreq();
   const entries = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 12);
@@ -405,7 +489,6 @@ function showFail() {
   document.getElementById('a-fail').style.display = 'block';
 }
 
-// Lưu tên người chơi nhập vào khi thua
 function saveName() {
   const name = document.getElementById('rinp').value.trim();
   const msg = document.getElementById('smsg');
@@ -415,11 +498,10 @@ function saveName() {
     return;
   }
   try {
-    const db = JSON.parse(localStorage.getItem('viet_names_db') || '[]');
+    const db = loadNames();
     db.push({ name, initials: S.parts.join(' '), date: new Date().toISOString() });
-    localStorage.setItem('viet_names_db', JSON.stringify(db));
+    saveNames(db);
 
-    // Cũng tự học từ tên này: tách và ghi nhận tần suất các từ
     const nameParts = name.trim().split(/\s+/);
     if (nameParts.length >= 2) {
       nameParts.forEach((w, i) => {
@@ -453,7 +535,145 @@ function reset() {
   } catch(e) {}
 }
 
+// =============================================
+// QUẢN LÝ DỮ LIỆU
+// =============================================
+const PASSWORD = '2502';
+
+function requestPassword() {
+  document.getElementById('passwordInput').value = '';
+  document.getElementById('passwordError').textContent = '';
+  document.getElementById('passwordModal').classList.add('show');
+  document.getElementById('passwordInput').focus();
+}
+
+function closePasswordModal() {
+  document.getElementById('passwordModal').classList.remove('show');
+}
+
+function verifyPassword() {
+  const pwd = document.getElementById('passwordInput').value;
+  const errMsg = document.getElementById('passwordError');
+  
+  if (pwd === PASSWORD) {
+    closePasswordModal();
+    openDataManager();
+  } else {
+    errMsg.textContent = '❌ Mật khẩu không đúng';
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('passwordInput').shake?.();
+  }
+}
+
+function openDataManager() {
+  const modal = document.getElementById('dataModal');
+  modal.classList.add('show');
+  updateDataManager();
+}
+
+function closeDataManager() {
+  document.getElementById('dataModal').classList.remove('show');
+}
+
+function updateDataManager() {
+  const names = loadNames();
+  const total = names.length;
+  document.getElementById('statTotal').textContent = total;
+  
+  if (total > 0) {
+    const lastDate = new Date(names[names.length - 1].date);
+    document.getElementById('statDate').textContent = lastDate.toLocaleDateString('vi-VN');
+  } else {
+    document.getElementById('statDate').textContent = '-';
+  }
+
+  const list = document.getElementById('namesList');
+  if (total === 0) {
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:#888;font-size:14px">Chưa có tên nào được lưu</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  names.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'name-item';
+    const date = new Date(item.date);
+    const dateStr = date.toLocaleDateString('vi-VN');
+    div.innerHTML = `<div class="name-info">
+      <div class="name-text">${item.name}</div>
+      <div class="name-meta">${item.initials} • ${dateStr}</div>
+    </div>
+    <button class="name-delete" onclick="deleteName(${idx})">Xóa</button>`;
+    list.appendChild(div);
+  });
+}
+
+function deleteName(idx) {
+  if (confirm('Bạn có chắc muốn xóa tên này?')) {
+    const names = loadNames();
+    names.splice(idx, 1);
+    saveNames(names);
+    updateDataManager();
+  }
+}
+
+function clearAllData() {
+  if (confirm('⚠️  Bạn chắc chắn muốn xóa TẤT CẢ dữ liệu tên đã lưu? Hành động này không thể hoàn tác!')) {
+    saveNames([]);
+    updateDataManager();
+  }
+}
+
+function exportJSON() {
+  const names = loadNames();
+  const dataStr = JSON.stringify(names, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `names_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportCSV() {
+  const names = loadNames();
+  if (names.length === 0) {
+    alert('Không có dữ liệu để xuất');
+    return;
+  }
+  
+  let csv = 'Tên,Chữ cái đầu,Ngày lưu\n';
+  names.forEach(item => {
+    const date = new Date(item.date).toLocaleDateString('vi-VN');
+    csv += `"${item.name}","${item.initials}","${date}"\n`;
+  });
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `names_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 document.getElementById('inp').addEventListener('keydown', e => { if (e.key === 'Enter') startGame(); });
+
+// Đóng modal khi click background
+document.getElementById('dataModal').addEventListener('click', (e) => {
+  if (e.target.id === 'dataModal') closeDataManager();
+});
+
+// Xử lý Enter trong ô mật khẩu
+document.getElementById('passwordInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') verifyPassword();
+});
+
+// Đóng password modal khi click background
+document.getElementById('passwordModal').addEventListener('click', (e) => {
+  if (e.target.id === 'passwordModal') closePasswordModal();
+});
 </script>
 </body>
 </html>
