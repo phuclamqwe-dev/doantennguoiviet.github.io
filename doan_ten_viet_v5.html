@@ -1,0 +1,555 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body-x{font-family:var(--font-sans)}
+.wrap{max-width:500px;margin:0 auto;padding:1.5rem 0 3rem;font-family:var(--font-sans)}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem}
+.hdr-left h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.hdr-left p{font-size:13px;color:var(--color-text-secondary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
+.lbl{font-size:12px;color:var(--color-text-secondary);text-align:center;margin-bottom:10px}
+input[type=text],input[type=password]{padding:8px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:15px;outline:none;width:100%;background:var(--color-background-primary);color:var(--color-text-primary)}
+input:focus{border-color:var(--color-border-info)}
+button{padding:8px 18px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:14px;cursor:pointer}
+button:hover{background:var(--color-background-secondary)}
+button:active{transform:scale(.98)}
+button:disabled{opacity:.4;cursor:default;transform:none}
+.btn-blue{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.btn-blue:hover{opacity:.85}
+.btn-green{background:#E1F5EE;color:#085041;border-color:#5DCAA5}
+.btn-green:hover{background:#9FE1CB}
+.btn-red{background:#FAECE7;color:#712B13;border-color:#F0997B}
+.btn-red:hover{background:#F5C4B3}
+.btn-danger-sm{padding:4px 10px;font-size:12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-danger);background:var(--color-background-danger);color:var(--color-text-danger);cursor:pointer}
+.btn-row{display:flex;gap:10px;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.badge-initials{display:inline-block;background:var(--color-background-info);color:var(--color-text-info);border-radius:var(--border-radius-md);padding:7px 18px;font-size:18px;font-weight:500;letter-spacing:5px}
+.big-name{font-size:26px;font-weight:500;color:var(--color-text-primary);text-align:center;margin:.75rem 0}
+.atxt{font-size:12px;color:var(--color-text-secondary);text-align:center;margin-bottom:4px}
+.segs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:.5rem 0}
+.seg{padding:5px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:15px;cursor:pointer}
+.seg.on{background:#E1F5EE;border-color:#5DCAA5;color:#085041;font-weight:500}
+.warn{font-size:12px;color:var(--color-text-warning);text-align:center;min-height:15px;margin-bottom:3px}
+.exbox{background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);padding:1rem;margin-bottom:.75rem}
+.exbox p{font-size:13px;color:var(--color-text-warning);text-align:center;margin-bottom:10px;line-height:1.5}
+.exbox-row{display:flex;gap:8px}
+.ok{font-size:12px;color:var(--color-text-success);margin-top:6px;text-align:center}
+.err{font-size:12px;color:var(--color-text-danger);margin-top:5px;min-height:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:.5rem}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);font-size:12px;background:var(--color-background-secondary)}
+.chip-r{font-size:10px;color:var(--color-text-secondary)}
+.chip-w{color:var(--color-text-primary);font-weight:500}
+.chip-c{font-size:10px;color:var(--color-text-info)}
+.new-chip{border-color:#5DCAA5;background:#E1F5EE}
+.new-chip .chip-w{color:#085041}
+.src-badge{display:inline-block;padding:2px 6px;border-radius:5px;font-size:11px;font-weight:500}
+.src-g{background:#E1F5EE;color:#085041}
+.src-f{background:#FAECE7;color:#712B13}
+.src-e{background:var(--color-background-warning);color:var(--color-text-warning)}
+.day-title{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin:1rem 0 6px;padding-bottom:4px;border-bottom:0.5px solid var(--color-border-tertiary)}
+table.nt{width:100%;border-collapse:collapse;font-size:13px}
+table.nt th{text-align:left;padding:4px 6px;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;font-size:12px}
+table.nt td{padding:6px 6px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle}
+table.nt tr:last-child td{border-bottom:none}
+.empty{text-align:center;color:var(--color-text-secondary);font-size:14px;padding:2rem 0}
+.tabs{display:flex;gap:6px;margin-bottom:1rem}
+.tab{padding:5px 13px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);font-size:13px;cursor:pointer}
+.tab.on{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);font-weight:500}
+.panel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.modal-wrap{min-height:400px;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;border-radius:var(--border-radius-lg);margin-top:.5rem}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);padding:1.5rem;width:100%;max-width:460px;max-height:75vh;overflow-y:auto}
+.modal-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.modal-hd h3{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.close-btn{background:none;border:none;font-size:20px;cursor:pointer;color:var(--color-text-secondary);padding:0}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--color-border-secondary);border-top-color:var(--color-text-info);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+
+<div class="wrap" id="root">
+
+  <div class="hdr">
+    <div class="hdr-left">
+      <h2>Tôi đoán tên bạn!</h2>
+      <p>Nhập chữ cái đầu từng phần trong tên.</p>
+    </div>
+    <button onclick="openLogin()" style="font-size:12px;padding:5px 10px">⚙ Quản lý</button>
+  </div>
+
+  <!-- INPUT -->
+  <div class="card" id="c-input">
+    <div class="lbl">Ví dụ: <b>N V A</b> → Nguyễn Văn An &nbsp;|&nbsp; <b>T T H</b> → Trần Thị Hoa</div>
+    <div style="display:flex;gap:8px;margin-bottom:6px">
+      <input id="inp" type="text" placeholder="N V A" maxlength="20" style="font-size:15px" />
+      <button class="btn-blue" onclick="startGame()">Bắt đầu</button>
+    </div>
+    <div class="err" id="err"></div>
+  </div>
+
+  <!-- GAME -->
+  <div class="card" id="c-game" style="display:none">
+
+    <div id="a-wait" style="text-align:center">
+      <div style="font-size:16px;font-weight:500;color:var(--color-text-secondary);padding:1rem 0" id="wtxt">Hãy chờ đợi, tên bạn sắp được đoán...</div>
+      <div style="margin:.75rem 0"><span class="badge-initials" id="badge"></span></div>
+    </div>
+
+    <div id="a-guess" style="display:none">
+      <div class="atxt" id="atxt"></div>
+
+      <!-- Hết dữ liệu -->
+      <div class="exbox" id="exbox" style="display:none">
+        <p>Tôi đã thử hết mọi từ cho chữ cái này rồi<br>Hãy nhập tên thật để tôi học thêm nhé!</p>
+        <div class="exbox-row">
+          <input type="text" id="ex-inp" placeholder="Nhập tên đầy đủ..." style="font-size:14px" />
+          <button class="btn-blue" id="ex-btn" style="white-space:nowrap;font-size:13px;padding:8px 12px" onclick="saveExhausted()">Lưu &amp; học</button>
+        </div>
+        <div class="ok" id="ex-ok" style="display:none"></div>
+        <div id="ex-new-words" style="display:none;margin-top:.75rem">
+          <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">Từ mới được thêm vào dữ liệu:</div>
+          <div class="chips" id="ex-new-chips"></div>
+        </div>
+        <div class="btn-row"><button onclick="reset()">Chơi lại</button></div>
+      </div>
+
+      <!-- Đoán chính -->
+      <div id="guess-body" style="display:none">
+        <div class="big-name" id="gname"></div>
+        <div class="lbl">Phần nào đúng? Nhấn để giữ lại:</div>
+        <div class="segs" id="segs"></div>
+        <div class="warn" id="warnmsg"></div>
+        <div class="btn-row">
+          <button class="btn-green" onclick="onRight()">✓ Đúng rồi!</button>
+          <button class="btn-red" onclick="onWrong()">✗ Chưa đúng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thắng -->
+    <div id="a-win" style="display:none;text-align:center;padding:.75rem 0">
+      <div style="font-size:32px;margin-bottom:8px">🎉</div>
+      <div style="font-size:17px;font-weight:500;color:#085041;margin-bottom:4px" id="win-txt"></div>
+      <div style="font-size:13px;color:var(--color-text-secondary)" id="win-sub"></div>
+      <div id="win-stats" style="display:none;margin-top:1.25rem">
+        <div style="font-size:11px;color:var(--color-text-secondary);text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Tên phổ biến nhất</div>
+        <div class="chips" id="win-chips" style="justify-content:center"></div>
+      </div>
+      <div class="btn-row"><button class="btn-blue" onclick="reset()">Chơi lại</button></div>
+    </div>
+
+    <!-- Thua -->
+    <div id="a-fail" style="display:none">
+      <div style="font-size:14px;color:var(--color-text-secondary);text-align:center;margin-bottom:1rem;line-height:1.6">
+        Tôi đã thử 50 lần mà chưa đúng<br>Bạn hãy cho tôi biết tên thật nhé!
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <input type="text" id="rinp" placeholder="Nhập tên đầy đủ của bạn..." />
+        <button class="btn-blue" id="sbtn" onclick="saveFail()">Lưu tên</button>
+      </div>
+      <div class="ok" id="smsg" style="display:none"></div>
+      <div class="btn-row"><button onclick="reset()">Chơi lại</button></div>
+    </div>
+
+  </div>
+
+  <!-- ADMIN LOGIN (inline modal) -->
+  <div id="login-wrap" style="display:none">
+    <div class="modal-wrap">
+      <div class="modal" style="max-width:300px">
+        <div class="modal-hd">
+          <h3>Đăng nhập</h3>
+          <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <input type="password" id="pw" placeholder="Mật khẩu..." />
+          <button class="btn-blue" onclick="checkPw()">Đăng nhập</button>
+        </div>
+        <div class="err" id="pw-err"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL (inline) -->
+  <div id="admin-wrap" style="display:none">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <span style="font-size:15px;font-weight:500;color:var(--color-text-primary)">Quản lý dữ liệu</span>
+        <button onclick="closeModal()" style="font-size:12px;padding:4px 10px">Đóng</button>
+      </div>
+      <div class="tabs">
+        <button class="tab on" id="t-hist" onclick="switchTab('hist')">Lịch sử tên</button>
+        <button class="tab" id="t-freq" onclick="switchTab('freq')">Tần suất từ</button>
+      </div>
+
+      <div id="p-hist">
+        <div class="panel-top">
+          <span style="font-size:12px;color:var(--color-text-secondary)" id="hist-info"></span>
+          <button class="btn-danger-sm" onclick="clearHistory()">Xoá tất cả</button>
+        </div>
+        <div id="hist-body"></div>
+      </div>
+
+      <div id="p-freq" style="display:none">
+        <div class="panel-top">
+          <span style="font-size:12px;color:var(--color-text-secondary)" id="freq-info"></span>
+          <button class="btn-danger-sm" onclick="clearFreq()">Xoá tần suất</button>
+        </div>
+        <div class="chips" id="freq-body"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── DỮ LIỆU GỐC ──────────────────────────────────────────
+const HO_BASE  = ['An','Ân','Bùi','Bạch','Bế','Bình','Cao','Châu','Chu','Chung','Cù','Đặng','Đào','Đinh','Đỗ','Đoàn','Dương','Dư','Giáp','Gia','Hà','Hoàng','Hồ','Huỳnh','Hứa','Kim','Kiều','Lâm','Lê','Lưu','Lý','Lữ','La','Liêu','Mai','Mạc','Mã','Nghiêm','Ngô','Nguyễn','Nông','Ninh','Phạm','Phan','Phùng','Phó','Quách','Quản','Quang','Tạ','Thái','Thân','Tống','Trần','Trịnh','Trương','Tô','Tăng','Văn','Vũ','Võ','Vương','Viên','Xứng','Yên'];
+const DEM_BASE = ['Anh','Ánh','Bá','Bích','Bình','Bảo','Công','Cẩm','Cát','Diễm','Diệu','Duy','Danh','Đình','Đức','Đoan','Gia','Giang','Hồng','Hữu','Hương','Hoàng','Hải','Khánh','Kim','Kiên','Lan','Lê','Linh','Mai','Mỹ','Minh','Mậu','Nam','Ngọc','Như','Nhật','Phúc','Phương','Phát','Quang','Quốc','Quỳnh','Quân','Sơn','Tài','Thành','Thanh','Thị','Thúy','Thùy','Thu','Tiến','Trung','Tuyết','Uyên','Văn','Vân','Viết','Xuân','Xuyên','Yến'];
+const TEN_BASE = ['An','Anh','Ánh','Ân','Bảo','Bình','Bích','Băng','Chi','Châu','Cường','Cẩm','Dũng','Duy','Duyên','Danh','Dương','Đạt','Đức','Đăng','Đan','Điệp','Giang','Gia','Hà','Hải','Hạnh','Hiền','Hiếu','Hoa','Hoàng','Hùng','Huy','Hương','Hân','Hằng','Khánh','Khoa','Kiên','Kim','Khải','Khang','Lâm','Lan','Linh','Loan','Long','Lộc','Lý','Mai','Minh','My','Mận','Nam','Ngân','Nga','Ngọc','Nhi','Nhung','Như','Nhật','Ngà','Phong','Phúc','Phương','Phát','Quân','Quỳnh','Quang','Sơn','Tài','Thảo','Thắng','Thanh','Thiện','Thu','Thư','Trang','Trinh','Trí','Tuấn','Tú','Tươi','Tuyết','Uyên','Vân','Việt','Vi','Xuân','Yến','Ý'];
+
+// Dữ liệu runtime (bắt đầu bằng BASE, sẽ được nạp thêm từ storage)
+let HO  = [...HO_BASE];
+let DEM = [...DEM_BASE];
+let TEN = [...TEN_BASE];
+
+// ── UTILS ─────────────────────────────────────────────────
+const fc       = w => [...w.normalize('NFC')][0].toUpperCase();
+const parseInits = r => r.trim().split(/[\s,]+/).filter(t=>t.length).map(t=>fc(t));
+const roleOf   = (i,n) => i===0?'ho':i===n-1?'ten':'dem';
+const baseOf   = (i,n) => i===0?HO:i===n-1?TEN:DEM;
+const pad      = n => String(n).padStart(2,'0');
+const el       = id => document.getElementById(id);
+const show     = id => { const e=el(id); if(e) e.style.display='block'; };
+const hide     = id => { const e=el(id); if(e) e.style.display='none'; };
+const showFlex = id => { const e=el(id); if(e) e.style.display='flex'; };
+
+// ── PERSISTENT STORAGE (cross-browser via window.storage) ─
+const SK_FREQ  = 'viet_freq_v2';
+const SK_NAMES = 'viet_names_v2';
+const SK_WORDS = 'viet_extra_words_v2'; // từ mới người chơi đóng góp
+
+async function stGet(key) {
+  try { const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null; }
+  catch(e) { return null; }
+}
+async function stSet(key, val) {
+  try { await window.storage.set(key, JSON.stringify(val), true); } catch(e) {}
+}
+
+// Load tần suất
+async function loadFreq() { return (await stGet(SK_FREQ)) || {}; }
+async function saveFreq(f) { await stSet(SK_FREQ, f); }
+async function getFreq(role, w) { const f = await loadFreq(); return f[role+':'+w] || 0; }
+async function recordWord(role, w) {
+  const f = await loadFreq();
+  f[role+':'+w] = (f[role+':'+w]||0) + 1;
+  await saveFreq(f);
+}
+
+// Load danh sách tên lịch sử
+async function loadNames() { return (await stGet(SK_NAMES)) || []; }
+async function saveNameRecord(name, initials, source) {
+  const db = await loadNames();
+  db.push({ name, initials, source, date: new Date().toISOString() });
+  await stSet(SK_NAMES, db);
+  // học tần suất
+  const ps = name.trim().split(/\s+/), n = ps.length;
+  for (let i=0; i<ps.length; i++) await recordWord(roleOf(i,n), ps[i]);
+}
+
+// Load và merge từ mới vào runtime lists
+async function loadExtraWords() {
+  const extra = (await stGet(SK_WORDS)) || { ho:[], dem:[], ten:[] };
+  extra.ho.forEach(w=>{ if(!HO.includes(w)) HO.push(w); });
+  extra.dem.forEach(w=>{ if(!DEM.includes(w)) DEM.push(w); });
+  extra.ten.forEach(w=>{ if(!TEN.includes(w)) TEN.push(w); });
+  return extra;
+}
+
+// Thêm từ mới vào storage nếu chưa có trong BASE
+async function addNewWords(nameParts) {
+  const n = nameParts.length;
+  const extra = (await stGet(SK_WORDS)) || { ho:[], dem:[], ten:[] };
+  const added = []; // { role, word, isNew }
+
+  nameParts.forEach((w, i) => {
+    const role = roleOf(i, n);
+    const base = i===0 ? HO_BASE : i===n-1 ? TEN_BASE : DEM_BASE;
+    const extraList = extra[role === 'ho' ? 'ho' : role === 'dem' ? 'dem' : 'ten'];
+    const isInBase  = base.includes(w);
+    const isInExtra = extraList.includes(w);
+    const runtimeList = i===0 ? HO : i===n-1 ? TEN : DEM;
+
+    if (!isInBase && !isInExtra) {
+      extraList.push(w);
+      added.push({ role, word: w, isNew: true });
+    }
+    // Dù từ đã có hay chưa, đảm bảo runtime có nó
+    if (!runtimeList.includes(w)) runtimeList.push(w);
+    if (!added.find(a=>a.word===w && a.role===role)) {
+      added.push({ role, word: w, isNew: false });
+    }
+  });
+
+  await stSet(SK_WORDS, extra);
+  return added;
+}
+
+// ── POOL & WEIGHTED PICK ──────────────────────────────────
+const BASE_W = 2;
+let freqCache = {};
+
+async function warmFreqCache() { freqCache = await loadFreq(); }
+function getFreqCached(role, w) { return freqCache[role+':'+w] || 0; }
+
+function buildPool(base, role, ch, excl) {
+  return base.filter(w=>fc(w)===ch && !excl.has(w))
+             .sort((a,b)=>getFreqCached(role,b)-getFreqCached(role,a));
+}
+
+function weightedPick(pool, role) {
+  if (!pool.length) return null;
+  const ws = pool.map(w=>getFreqCached(role,w)+BASE_W);
+  const tot = ws.reduce((a,b)=>a+b,0);
+  let r = Math.random()*tot;
+  for (let i=0;i<pool.length;i++){r-=ws[i];if(r<=0)return pool[i];}
+  return pool[pool.length-1];
+}
+
+function isExhausted() {
+  const{parts,locked,rejected}=S, n=parts.length;
+  return parts.every((ch,i)=>{
+    if(locked[i]!==undefined)return true;
+    return buildPool(baseOf(i,n),roleOf(i,n),ch,rejected[i]).length===0;
+  });
+}
+
+// ── STATE ─────────────────────────────────────────────────
+let S={};
+
+async function startGame() {
+  const raw=el('inp').value, parts=parseInits(raw);
+  if(parts.length<2){el('err').textContent='Vui lòng nhập ít nhất 2 chữ cái đầu.';return;}
+  el('err').textContent='';
+  hide('c-input'); show('c-game');
+  el('badge').textContent=parts.join(' · ');
+  // Tải từ mới từ storage vào runtime
+  await loadExtraWords();
+  await warmFreqCache();
+  S={parts,attempt:0,max:50,locked:{},rejected:parts.map(()=>new Set())};
+  setTimeout(()=>{el('wtxt').textContent='Tôi đang suy nghĩ...';setTimeout(doGuess,1100);},800);
+}
+
+function buildGuess(){
+  const{parts,locked,rejected}=S,n=parts.length;
+  return parts.map((ch,i)=>{
+    if(locked[i]!==undefined)return locked[i];
+    const role=roleOf(i,n),base=baseOf(i,n);
+    let pool=buildPool(base,role,ch,rejected[i]);
+    if(!pool.length){rejected[i].clear();pool=buildPool(base,role,ch,rejected[i]);}
+    return weightedPick(pool,role);
+  });
+}
+
+function doGuess(){
+  if(S.attempt>=S.max){showFail();return;}
+  if(isExhausted()){showExhausted();return;}
+  S.attempt++;
+  const segs=buildGuess(); S.cur=segs;
+  hide('a-wait'); show('a-guess'); hide('exbox'); show('guess-body');
+  el('atxt').textContent='Lần đoán thứ '+S.attempt+' / '+S.max;
+  el('gname').textContent=segs.map(s=>s||'[?]').join(' ');
+  el('warnmsg').textContent=segs.some(s=>s===null)?'Không có từ phù hợp với chữ cái này.':'';
+  renderSegs();
+}
+
+function showExhausted(){
+  hide('a-wait'); show('a-guess'); show('exbox'); hide('guess-body');
+  el('segs').innerHTML=''; el('warnmsg').textContent='';
+  el('atxt').textContent='Đã thử '+S.attempt+' lần — hết dữ liệu!';
+  el('ex-inp').value=''; el('ex-inp').disabled=false;
+  el('ex-btn').disabled=false; hide('ex-ok'); hide('ex-new-words');
+}
+
+async function saveExhausted(){
+  const name=el('ex-inp').value.trim();
+  if(!name)return;
+  el('ex-btn').disabled=true; el('ex-inp').disabled=true;
+
+  // Tách tên, thêm từ mới vào dữ liệu
+  const parts=name.trim().split(/\s+/);
+  const added=await addNewWords(parts);
+  const newWords=added.filter(a=>a.isNew);
+
+  // Lưu lịch sử
+  await saveNameRecord(name, S.parts.join(' '), 'exhausted');
+  await warmFreqCache();
+
+  el('ex-ok').textContent='✓ Đã lưu và học tên "'+name+'". Cảm ơn!';
+  show('ex-ok');
+
+  // Hiển thị từ mới thêm vào
+  if(newWords.length){
+    const chips=el('ex-new-chips'); chips.innerHTML='';
+    newWords.forEach(({role,word})=>{
+      const rl=role==='ho'?'Họ':role==='dem'?'Đệm':'Tên';
+      const c=document.createElement('div');
+      c.className='chip new-chip';
+      c.innerHTML='<span class="chip-r">'+rl+'</span><span class="chip-w">'+word+'</span><span class="chip-c">mới</span>';
+      chips.appendChild(c);
+    });
+    show('ex-new-words');
+  }
+}
+
+function renderSegs(){
+  const row=el('segs'); row.innerHTML='';
+  (S.cur||[]).forEach((seg,i)=>{
+    if(!seg)return;
+    const b=document.createElement('button');
+    b.className='seg'+(S.locked[i]!==undefined?' on':'');
+    b.textContent=seg;
+    b.onclick=()=>{
+      if(S.locked[i]!==undefined){delete S.locked[i];b.classList.remove('on');}
+      else{S.locked[i]=seg;b.classList.add('on');}
+    };
+    row.appendChild(b);
+  });
+}
+
+async function onRight(){
+  const n=S.parts.length, name=(S.cur||[]).filter(Boolean).join(' ');
+  for(let i=0;i<(S.cur||[]).length;i++) if(S.cur[i]) await recordWord(roleOf(i,n),S.cur[i]);
+  await saveNameRecord(name, S.parts.join(' '), 'guessed');
+  await warmFreqCache();
+  hide('a-guess'); show('a-win');
+  const msgs=['Tên bạn là '+name+' — thật sự rất đẹp!',name+' — một cái tên thật ý nghĩa!','Ồ, '+name+'! Cái tên nghe rất hay!',name+' — tên đặc biệt, tôi thích quá!','Đúng rồi, '+name+'! Âm điệu rất hay!'];
+  el('win-txt').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+  el('win-sub').textContent='Tôi đoán đúng sau '+S.attempt+' lần thử!';
+  renderWinStats();
+}
+
+async function renderWinStats(){
+  const freq=await loadFreq();
+  const entries=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(!entries.length)return;
+  const body=el('win-chips'); body.innerHTML='';
+  entries.forEach(([key,cnt])=>{
+    const[role,word]=key.split(':');
+    const rl=role==='ho'?'Họ':role==='dem'?'Đệm':'Tên';
+    const c=document.createElement('div'); c.className='chip';
+    c.innerHTML='<span class="chip-r">'+rl+'</span><span class="chip-w">'+word+'</span><span class="chip-c">×'+cnt+'</span>';
+    body.appendChild(c);
+  });
+  show('win-stats');
+}
+
+function onWrong(){
+  if(S.attempt>=S.max){showFail();return;}
+  (S.cur||[]).forEach((w,i)=>{if(w&&S.locked[i]===undefined)S.rejected[i].add(w);});
+  setTimeout(doGuess,200);
+}
+
+function showFail(){ hide('a-guess'); show('a-fail'); }
+
+async function saveFail(){
+  const name=el('rinp').value.trim();
+  if(!name){el('smsg').style.display='block';el('smsg').textContent='Vui lòng nhập tên.';el('smsg').style.color='var(--color-text-danger)';return;}
+  const parts=name.trim().split(/\s+/);
+  await addNewWords(parts);
+  await saveNameRecord(name, S.parts.join(' '), 'fail-50');
+  await warmFreqCache();
+  el('sbtn').disabled=true; el('rinp').disabled=true;
+  el('smsg').style.display='block'; el('smsg').style.color='var(--color-text-success)';
+  el('smsg').textContent='✓ Đã lưu và học tên "'+name+'". Cảm ơn!';
+}
+
+function reset(){
+  S={};
+  ['c-game','a-guess','a-win','a-fail'].forEach(hide);
+  show('c-input'); show('a-wait'); hide('exbox'); hide('guess-body'); hide('win-stats'); hide('smsg');
+  el('wtxt').textContent='Hãy chờ đợi, tên bạn sắp được đoán...';
+  el('segs').innerHTML=''; el('inp').value=''; el('err').textContent='';
+  el('win-chips').innerHTML='';
+  try{el('rinp').value='';el('rinp').disabled=false;el('sbtn').disabled=false;}catch(e){}
+}
+
+el('inp').addEventListener('keydown',e=>{if(e.key==='Enter')startGame();});
+el('pw').addEventListener('keydown',e=>{if(e.key==='Enter')checkPw();});
+
+// ── ADMIN ─────────────────────────────────────────────────
+const PW='2502';
+function openLogin(){ hide('c-input');hide('c-game');show('login-wrap'); setTimeout(()=>el('pw').focus(),80); }
+function checkPw(){
+  if(el('pw').value===PW){hide('login-wrap');openAdmin();}
+  else el('pw-err').textContent='Mật khẩu không đúng.';
+}
+function closeModal(){ hide('login-wrap');hide('admin-wrap');show('c-input'); }
+
+function openAdmin(){ switchTab('hist'); show('admin-wrap'); }
+
+function switchTab(tab){
+  el('t-hist').classList.toggle('on',tab==='hist');
+  el('t-freq').classList.toggle('on',tab==='freq');
+  el('p-hist').style.display=tab==='hist'?'block':'none';
+  el('p-freq').style.display=tab==='freq'?'block':'none';
+  tab==='hist'?renderHist():renderFreq();
+}
+
+function dayKey(iso){const d=new Date(iso);return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();}
+function timeStr(iso){const d=new Date(iso);return pad(d.getHours())+':'+pad(d.getMinutes());}
+
+const SRC={guessed:{l:'Đoán đúng',c:'src-g'},'fail-50':{l:'Nhập (50 lần)',c:'src-f'},exhausted:{l:'Nhập (hết data)',c:'src-e'}};
+
+async function renderHist(){
+  const body=el('hist-body');
+  body.innerHTML='<div class="empty"><span class="spinner"></span></div>';
+  const db=await loadNames();
+  el('hist-info').textContent=db.length+' tên đã lưu';
+  if(!db.length){body.innerHTML='<div class="empty">Chưa có tên nào được lưu.</div>';return;}
+  const groups={};
+  [...db].reverse().forEach(r=>{const dk=dayKey(r.date);if(!groups[dk])groups[dk]=[];groups[dk].push(r);});
+  body.innerHTML='';
+  Object.entries(groups).forEach(([day,recs])=>{
+    const g=document.createElement('div');
+    g.innerHTML='<div class="day-title">'+day+' — '+recs.length+' tên</div>';
+    const tbl=document.createElement('table'); tbl.className='nt';
+    tbl.innerHTML='<thead><tr><th>Tên</th><th>Chữ cái đầu</th><th>Nguồn</th><th>Giờ</th></tr></thead>';
+    const tbody=document.createElement('tbody');
+    recs.forEach(r=>{
+      const src=SRC[r.source]||{l:r.source,c:''};
+      const tr=document.createElement('tr');
+      tr.innerHTML='<td><b>'+r.name+'</b></td>'
+        +'<td style="font-family:monospace;font-size:11px;color:var(--color-text-secondary)">'+r.initials+'</td>'
+        +'<td><span class="src-badge '+src.c+'">'+src.l+'</span></td>'
+        +'<td style="font-size:11px;color:var(--color-text-secondary)">'+timeStr(r.date)+'</td>';
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody); g.appendChild(tbl); body.appendChild(g);
+  });
+}
+
+async function renderFreq(){
+  const body=el('freq-body');
+  body.innerHTML='<div class="empty"><span class="spinner"></span></div>';
+  const freq=await loadFreq();
+  const entries=Object.entries(freq).sort((a,b)=>b[1]-a[1]);
+  el('freq-info').textContent=entries.length+' từ trong dữ liệu';
+  if(!entries.length){body.innerHTML='<div class="empty">Chưa có dữ liệu tần suất.</div>';return;}
+  body.innerHTML='';
+  entries.forEach(([key,cnt])=>{
+    const[role,word]=key.split(':');
+    const rl=role==='ho'?'Họ':role==='dem'?'Đệm':'Tên';
+    const c=document.createElement('div'); c.className='chip';
+    c.innerHTML='<span class="chip-r">'+rl+'</span><span class="chip-w">'+word+'</span><span class="chip-c">×'+cnt+'</span>';
+    body.appendChild(c);
+  });
+}
+
+async function clearHistory(){
+  if(!confirm('Xoá toàn bộ lịch sử?'))return;
+  await stSet(SK_NAMES,[]);renderHist();
+}
+async function clearFreq(){
+  if(!confirm('Xoá toàn bộ tần suất?'))return;
+  await stSet(SK_FREQ,{});renderFreq();
+}
+</script>
