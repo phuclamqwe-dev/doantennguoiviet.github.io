@@ -449,6 +449,7 @@
 </div>
 
 <script>
+const API = "https://abc-xyz.onrender.com";
 // ═══════════════════════════════════════════════
 // DỮ LIỆU GỐC
 // ═══════════════════════════════════════════════
@@ -486,7 +487,10 @@ function lsGet(k)    { try { return JSON.parse(localStorage.getItem(k)); } catch
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
 
 function loadFreq()  { return lsGet(SK_FREQ)  || {}; }
-function loadNames() { return lsGet(SK_NAMES) || []; }
+async function loadNames() {
+  const res = await fetch(API + "/names");
+  return await res.json();
+}
 function loadExtra() { return lsGet(SK_EXTRA) || { ho:[], dem:[], ten:[] }; }
 
 function saveFreq(f)  { lsSet(SK_FREQ, f); }
@@ -502,9 +506,17 @@ function recordWord(role, w) {
 }
 
 function saveNameRecord(name, initials, source) {
-  const db = loadNames();
-  db.push({ name, initials, source, date: new Date().toISOString() });
-  saveNames(db);
+  fetch(API + "/save-name", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    name,
+    initials,
+    source
+  })
+});
   // Tự học tần suất
   const ps = name.trim().split(/\s+/), n = ps.length;
   ps.forEach((w,i) => recordWord(roleOf(i,n), w));
@@ -775,8 +787,8 @@ const dayKey  = iso => { const d=new Date(iso); return pad(d.getDate())+'/'+pad(
 const timeStr = iso => { const d=new Date(iso); return pad(d.getHours())+':'+pad(d.getMinutes()); };
 const SRC = { guessed:{l:'Đoán đúng',c:'s-g'}, 'fail-50':{l:'Nhập (50 lần)',c:'s-f'}, exhausted:{l:'Nhập (hết data)',c:'s-e'} };
 
-function renderHist() {
-  const db   = loadNames();
+async function renderHist() {
+  const db   = await loadNames();
   $('hist-info').textContent = db.length + ' tên đã lưu';
   const body = $('hist-body');
   if (!db.length) { body.innerHTML='<div class="empty">Chưa có tên nào được lưu.</div>'; return; }
