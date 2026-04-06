@@ -783,7 +783,7 @@ function switchTab(tab) {
     $('t-'+t).classList.toggle('on', t===tab);
     $('p-'+t).style.display = t===tab ? 'block' : 'none';
   });
-  if (tab==='hist')  renderHist();
+  if (tab==='hist')  await renderHist();
   if (tab==='freq')  renderFreq();
   if (tab==='words') renderWords();
 }
