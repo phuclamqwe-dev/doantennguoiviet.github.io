@@ -767,10 +767,11 @@ function checkPw() {
   else $('pw-err').textContent='Mật khẩu không đúng.';
 }
 
-function openAdmin() {
-  hide('c-input'); hide('c-game');
+async function openAdmin() {
+  hide('c-input'); 
+  hide('c-game');
   show('admin-section');
-  switchTab('hist');
+  await renderHist(); // 👈 quan trọng
 }
 function closeAdmin() {
   hide('admin-section');
@@ -782,7 +783,7 @@ function switchTab(tab) {
     $('t-'+t).classList.toggle('on', t===tab);
     $('p-'+t).style.display = t===tab ? 'block' : 'none';
   });
-  if (tab==='hist')  renderHist();
+  if (tab==='hist')  await renderHist();
   if (tab==='freq')  renderFreq();
   if (tab==='words') renderWords();
 }
